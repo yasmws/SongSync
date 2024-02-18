@@ -1269,7 +1269,7 @@ MonoBehaviour:
   songDelayInSeconds: 0
   inputDelayInMilliseconds: 0
   marginOfError: 0.1
-  fileLocation: Assets/Audio/Brianstorm/notes.mid
+  fileLocation: Assets\Audio\Aerosmith-Same_Old_Song_Dance/notes.mid
   noteTime: 1
   noteSpawnY: 7
   noteTapY: -3

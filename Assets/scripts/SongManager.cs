@@ -68,6 +68,7 @@ public class SongManager : MonoBehaviour
     private void ReadFromFile()
     {
         midiFile = MidiFile.Read(fileLocation);
+        Debug.Log(fileLocation);
         GetDataFromMidi();
     }
     public void GetDataFromMidi()
