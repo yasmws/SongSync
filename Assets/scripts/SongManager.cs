@@ -45,7 +45,7 @@ public class SongManager : MonoBehaviour
 
     private IEnumerator ReadFromWebsite()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get(Application.streamingAssetsPath + "/" + fileLocation))
+        using (UnityWebRequest www = UnityWebRequest.Get(fileLocation))
         {
             yield return www.SendWebRequest();
 
@@ -67,7 +67,7 @@ public class SongManager : MonoBehaviour
 
     private void ReadFromFile()
     {
-        midiFile = MidiFile.Read(Application.streamingAssetsPath + "/" + fileLocation);
+        midiFile = MidiFile.Read(fileLocation);
         GetDataFromMidi();
     }
     public void GetDataFromMidi()
