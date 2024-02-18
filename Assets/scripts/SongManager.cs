@@ -7,20 +7,19 @@ using System.IO;
 using UnityEngine.Networking;
 using System;
 
-
 public class SongManager : MonoBehaviour
 {
     public static SongManager Instance;
     public AudioSource audioSource;
+    public Lane[] lanes;
     public float songDelayInSeconds;
-    public int inputDelayInMilliSeconds;
+    public int inputDelayInMilliseconds;
     public double marginOfError;
 
     public string fileLocation;
     public float noteTime;
     public float noteSpawnY;
     public float noteTapY;
-
     public float noteDespawnY
     {
         get
@@ -28,19 +27,41 @@ public class SongManager : MonoBehaviour
             return noteTapY - (noteSpawnY - noteTapY);
         }
     }
-    public static MidiFile midiFile;
 
-    private void Start()
+    public static MidiFile midiFile;
+    // Start is called before the first frame update
+    void Start()
     {
         Instance = this;
-
-        if(Application.streamingAssetsPath.StartsWith("http://") || Application.streamingAssetsPath.StartsWith("https://"))
+        if (Application.streamingAssetsPath.StartsWith("http://") || Application.streamingAssetsPath.StartsWith("https://"))
         {
-            ReadFromWebsite();
+            StartCoroutine(ReadFromWebsite());
         }
         else
         {
             ReadFromFile();
+        }
+    }
+
+    private IEnumerator ReadFromWebsite()
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(Application.streamingAssetsPath + "/" + fileLocation))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                byte[] results = www.downloadHandler.data;
+                using (var stream = new MemoryStream(results))
+                {
+                    midiFile = MidiFile.Read(stream);
+                    GetDataFromMidi();
+                }
+            }
         }
     }
 
@@ -49,28 +70,27 @@ public class SongManager : MonoBehaviour
         midiFile = MidiFile.Read(Application.streamingAssetsPath + "/" + fileLocation);
         GetDataFromMidi();
     }
-
-    private void ReadFromWebsite()
-    {
-        throw new NotImplementedException();
-    }
-
     public void GetDataFromMidi()
     {
         var notes = midiFile.GetNotes();
-        var array = new Note[notes.Count];
+        var array = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
         notes.CopyTo(array, 0);
+
+        foreach (var lane in lanes) lane.SetTimeStamps(array);
+
         Invoke(nameof(StartSong), songDelayInSeconds);
-
     }
-
+    public void StartSong()
+    {
+        audioSource.Play();
+    }
     public static double GetAudioSourceTime()
     {
         return (double)Instance.audioSource.timeSamples / Instance.audioSource.clip.frequency;
     }
 
-    public void StartSong()
+    void Update()
     {
-        audioSource.Play();
+        
     }
 }
