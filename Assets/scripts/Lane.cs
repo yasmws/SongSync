@@ -60,8 +60,8 @@ public class Lane : MonoBehaviour
                 {
                     Hit();
                     print($"Hit on {inputIndex} note");
-                    notes[inputIndex].GetComponent<SpriteRenderer>().color = Color.black;
-                    //Destroy(notes[inputIndex].gameObject);
+                    //notes[inputIndex].GetComponent<SpriteRenderer>().color = Color.green;
+                    Destroy(notes[inputIndex].gameObject);
                     inputIndex++;
                 }
                 else
