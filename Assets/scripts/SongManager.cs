@@ -15,6 +15,9 @@ public class SongManager : MonoBehaviour
     public float songDelayInSeconds;
     public int inputDelayInMilliseconds;
     public double marginOfError;
+    public int test;
+    public ICollection<Melanchall.DryWetMidi.Interaction.Note> notes;
+
 
     public string fileLocation;
     public float noteTime;
@@ -73,11 +76,9 @@ public class SongManager : MonoBehaviour
     }
     public void GetDataFromMidi()
     {
-        var notes = midiFile.GetNotes();
-        var array = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
-        notes.CopyTo(array, 0);
+        notes = midiFile.GetNotes();
 
-        foreach (var lane in lanes) lane.SetTimeStamps(array);
+        foreach (var lane in lanes) lane.SetTimeStamps(notes);
 
         Invoke(nameof(StartSong), songDelayInSeconds);
     }
@@ -92,6 +93,6 @@ public class SongManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 }

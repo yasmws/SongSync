@@ -760,11 +760,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteRestriction: 0
+  songManager: {fileID: 1391792832}
   input: 97
   notePrefab: {fileID: 3629880901980878395, guid: 2a87282960d590a488788e192127ee27, type: 3}
   lanePrefab: {fileID: 0}
   laneColor: {r: 0, g: 1, b: 0.16855001, a: 1}
   timeStamps: []
+  songTime: 0
+  timeStampsTime: 0
 --- !u!4 &317166471
 Transform:
   m_ObjectHideFlags: 0
@@ -810,12 +813,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a86ca82e467f1342be2fef41ac45b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteRestriction: 11
+  noteRestriction: 4
+  songManager: {fileID: 1391792832}
   input: 103
   notePrefab: {fileID: 3629880901980878395, guid: 2a87282960d590a488788e192127ee27, type: 3}
   lanePrefab: {fileID: 0}
   laneColor: {r: 1, g: 0.48748046, b: 0, a: 1}
   timeStamps: []
+  songTime: 0
+  timeStampsTime: 0
 --- !u!4 &790910751
 Transform:
   m_ObjectHideFlags: 0
@@ -861,12 +867,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a86ca82e467f1342be2fef41ac45b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteRestriction: 9
+  noteRestriction: 3
+  songManager: {fileID: 1391792832}
   input: 102
   notePrefab: {fileID: 3629880901980878395, guid: 2a87282960d590a488788e192127ee27, type: 3}
   lanePrefab: {fileID: 0}
   laneColor: {r: 0, g: 0.2048912, b: 1, a: 1}
   timeStamps: []
+  songTime: 0
+  timeStampsTime: 0
 --- !u!4 &925227599
 Transform:
   m_ObjectHideFlags: 0
@@ -912,12 +921,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a86ca82e467f1342be2fef41ac45b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteRestriction: 5
+  noteRestriction: 1
+  songManager: {fileID: 1391792832}
   input: 115
   notePrefab: {fileID: 3629880901980878395, guid: 2a87282960d590a488788e192127ee27, type: 3}
   lanePrefab: {fileID: 0}
   laneColor: {r: 1, g: 0, b: 0, a: 1}
   timeStamps: []
+  songTime: 0
+  timeStampsTime: 0
 --- !u!4 &955344000
 Transform:
   m_ObjectHideFlags: 0
@@ -1129,7 +1141,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 208f1d522cb93574390d808f095d3af3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ee0949b0bd0ed464991fc821be5f1ec4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1265,10 +1277,11 @@ MonoBehaviour:
   - {fileID: 955343999}
   - {fileID: 1782885084}
   - {fileID: 925227598}
-  - {fileID: 925227598}
+  - {fileID: 790910750}
   songDelayInSeconds: 0
   inputDelayInMilliseconds: 0
   marginOfError: 0.1
+  spawnIndex: 0
   fileLocation: Assets\Audio\Aerosmith-Same_Old_Song_Dance/notes.mid
   noteTime: 1
   noteSpawnY: 7
@@ -1741,12 +1754,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a86ca82e467f1342be2fef41ac45b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteRestriction: 7
+  noteRestriction: 2
+  songManager: {fileID: 1391792832}
   input: 100
   notePrefab: {fileID: 3629880901980878395, guid: 2a87282960d590a488788e192127ee27, type: 3}
   lanePrefab: {fileID: 0}
   laneColor: {r: 1, g: 0.9071804, b: 0, a: 1}
   timeStamps: []
+  songTime: 0
+  timeStampsTime: 0
 --- !u!4 &1782885085
 Transform:
   m_ObjectHideFlags: 0
