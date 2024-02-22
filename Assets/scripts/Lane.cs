@@ -3,12 +3,11 @@ using Melanchall.DryWetMidi.MusicTheory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Lane : MonoBehaviour
 {
-    public Melanchall.DryWetMidi.MusicTheory.NoteName noteRestriction;
+    public int noteRestriction;
     public SongManager songManager;
     public KeyCode input;
     public GameObject notePrefab;
@@ -17,8 +16,6 @@ public class Lane : MonoBehaviour
     public Color laneColor;
     public List<double> timeStamps = new List<double>();
 
-    public double songTime;
-    public double timeStampsTime;
 
     int spawnIndex = 0;
     int inputIndex = 0;
@@ -34,8 +31,8 @@ public class Lane : MonoBehaviour
         notes.CopyTo(notesArray, 0);
         foreach (var note in notesArray)
         {
-       
-            if (note.NoteName == noteRestriction)
+            
+            if (note.NoteNumber == noteRestriction)
             {
                 var metricTimeSpan = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, SongManager.midiFile.GetTempoMap());
                 timeStamps.Add((double)metricTimeSpan.Minutes * 60f + metricTimeSpan.Seconds + (double)metricTimeSpan.Milliseconds / 1000f);
@@ -45,8 +42,7 @@ public class Lane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        songTime = SongManager.GetAudioSourceTime();
-        timeStampsTime = timeStamps[spawnIndex] - SongManager.Instance.noteTime;
+        
         if (spawnIndex < timeStamps.Count)
         {
 
