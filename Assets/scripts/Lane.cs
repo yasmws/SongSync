@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.MusicTheory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Lane : MonoBehaviour
@@ -11,10 +12,10 @@ public class Lane : MonoBehaviour
     public SongManager songManager;
     public KeyCode input;
     public GameObject notePrefab;
-    public GameObject lanePrefab;
     List<Note> notes = new List<Note>();
     public Color laneColor;
     public List<double> timeStamps = new List<double>();
+    private SpriteRenderer hitboxRenderer;
 
 
     int spawnIndex = 0;
@@ -23,7 +24,8 @@ public class Lane : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        hitboxRenderer = transform.Find("Hitbox").GetComponent<SpriteRenderer>();
+        hitboxRenderer.color = laneColor;
     }
     public void SetTimeStamps(ICollection<Melanchall.DryWetMidi.Interaction.Note> notes)
     {
@@ -42,7 +44,18 @@ public class Lane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (Input.GetKeyDown(input))
+        {
+            hitboxRenderer.color = Color.black;
+        }
+
+        if (Input.GetKeyUp(input))
+        {
+            hitboxRenderer.color = laneColor;
+        }
+
+
         if (spawnIndex < timeStamps.Count)
         {
 
@@ -68,7 +81,6 @@ public class Lane : MonoBehaviour
                 {
                     Hit();
                     print($"Hit on {inputIndex} note");
-                    //notes[inputIndex].GetComponent<SpriteRenderer>().color = Color.green;
                     Destroy(notes[inputIndex].gameObject);
                     inputIndex++;
                 }
