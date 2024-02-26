@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Note : MonoBehaviour
 {
     double timeInstantiated;
+    public float duration;
     public float assignedTime;
 
     // Start is called before the first frame update
@@ -18,15 +20,18 @@ public class Note : MonoBehaviour
     {
         double timeSinceInstantiated = SongManager.GetAudioSourceTime() - timeInstantiated;
         float t = (float)(timeSinceInstantiated / (SongManager.Instance.noteTime * 2));
-
-        if (t > 1)
+        float longNoteHeight = gameObject.transform.GetChild(0).localScale.y;
+        
+        if (timeSinceInstantiated > duration && (transform.localPosition.y + longNoteHeight) < SongManager.Instance.noteDespawnY)
         {
+            
             Destroy(gameObject);
         }
         else
         {
-            transform.localPosition = Vector3.Lerp(Vector3.up * SongManager.Instance.noteSpawnY, Vector3.up * SongManager.Instance.noteDespawnY, t); 
-            GetComponent<SpriteRenderer>().enabled = true;
+            var notePosition = transform.localPosition;
+            notePosition.y = SongManager.Instance.noteSpawnY + (SongManager.Instance.noteDespawnY - SongManager.Instance.noteSpawnY) * t;
+            transform.localPosition = notePosition;
         }
     }
 }

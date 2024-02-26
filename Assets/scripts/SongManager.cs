@@ -30,6 +30,13 @@ public class SongManager : MonoBehaviour
             return noteTapY - (noteSpawnY - noteTapY);
         }
     }
+    public float noteDistanceToTap
+    {
+        get
+        {
+            return Mathf.Abs(noteTapY - noteSpawnY);
+        }
+    }
 
     public static MidiFile midiFile;
     // Start is called before the first frame update
