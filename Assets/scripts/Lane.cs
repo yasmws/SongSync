@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.MusicTheory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -27,13 +28,29 @@ public class Lane : MonoBehaviour
         hitboxRenderer = transform.Find("Hitbox").GetComponent<SpriteRenderer>();
         hitboxRenderer.color = laneColor;
     }
+    private List<Melanchall.DryWetMidi.Interaction.Note> RemoveOverlappingNotes(ICollection<Melanchall.DryWetMidi.Interaction.Note> notes)
+    {
+        var allNotesArray = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
+        notes.CopyTo(allNotesArray, 0);
+        var filteredNotesArray = new List<Melanchall.DryWetMidi.Interaction.Note>();
+
+        foreach(var note in allNotesArray)
+        {
+            if (note.NoteNumber == noteRestriction)
+            {
+                if (filteredNotesArray.Count > 0 && filteredNotesArray[^1].Time < note.Time && filteredNotesArray[^1].EndTime > note.Time) continue;
+                else filteredNotesArray.Add(note);
+            }
+        }
+
+        return filteredNotesArray;
+    }
     public void SetTimeStamps(ICollection<Melanchall.DryWetMidi.Interaction.Note> notes)
     {
-        var notesArray = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
-        notes.CopyTo(notesArray, 0);
+        var notesArray = RemoveOverlappingNotes(notes);
+
         foreach (var note in notesArray)
         {
-            
             if (note.NoteNumber == noteRestriction)
             {
                 var metricTimeSpan = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, SongManager.midiFile.GetTempoMap());
