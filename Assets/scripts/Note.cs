@@ -8,6 +8,8 @@ public class Note : MonoBehaviour
     double timeInstantiated;
     public float duration;
     public float assignedTime;
+    public bool isPressing { get; set; } = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +20,9 @@ public class Note : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Se tá sendo pressionado ele fica "congelado"
+        if (isPressing) return;
+
         double timeSinceInstantiated = SongManager.GetAudioSourceTime() - timeInstantiated;
         float t = (float)(timeSinceInstantiated / (SongManager.Instance.noteTime * 2));
         float longNoteHeight = gameObject.transform.GetChild(0).localScale.y;
