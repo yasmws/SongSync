@@ -17,6 +17,7 @@ public class Lane : MonoBehaviour
     public Color laneColor;
     public List<NoteData> timeStamps = new List<NoteData>();
     private SpriteRenderer hitboxRenderer;
+    private bool isInLongNote = false;
 
 
     int spawnIndex = 0;
@@ -56,6 +57,7 @@ public class Lane : MonoBehaviour
                 var metricTimeSpan = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, SongManager.midiFile.GetTempoMap());
                 var metricTimeSpanDuration = TimeConverter.ConvertTo<MetricTimeSpan>(note.Length, SongManager.midiFile.GetTempoMap());
                 var duration = (double)metricTimeSpanDuration.Minutes * 60f + metricTimeSpanDuration.Seconds + (double)metricTimeSpanDuration.Milliseconds / 1000f;
+                if (duration < SongManager.Instance.minLongNoteDuration) duration = 0;
                 timeStamps.Add(new NoteData((double)metricTimeSpan.Minutes * 60f + metricTimeSpan.Seconds + (double)metricTimeSpan.Milliseconds / 1000f, duration));
             }
         }
@@ -101,7 +103,6 @@ public class Lane : MonoBehaviour
                 note.GetComponent<SpriteRenderer>().color = laneColor;
                 childTransform.GetComponent<SpriteRenderer>().color = laneColor;
 
-                //Debug.Log("on spawn: " + note.transform.localPosition);
                 note.GetComponent<SpriteRenderer>().enabled = true;
                 childTransform.GetComponent<SpriteRenderer>().enabled = true;
 
@@ -112,28 +113,85 @@ public class Lane : MonoBehaviour
         if (inputIndex < timeStamps.Count)
         {
             double timeStamp = timeStamps[inputIndex].timestamp;
+            double endTimeStamp = timeStamps[inputIndex].timestamp + timeStamps[inputIndex].duration;
+            double duration = timeStamps[inputIndex].duration;
             double marginOfError = SongManager.Instance.marginOfError;
             double audioTime = SongManager.GetAudioSourceTime() - (SongManager.Instance.inputDelayInMilliseconds / 1000.0);
+            double remainingDuration = endTimeStamp - audioTime > 0 ? endTimeStamp - audioTime : 0;
 
+            // Pressionou uma tecla
             if (Input.GetKeyDown(input))
             {
+                // Pressionou no tempo certo?
                 if (Math.Abs(audioTime - timeStamp) < marginOfError)
                 {
                     Hit();
+                    Point(100);
                     print($"Hit on {inputIndex} note");
-                    Destroy(notes[inputIndex].gameObject);
-                    inputIndex++;
+
+                    // Se for uma nota curta, pode deletar o objeto e seguir pra verificar a próxima nota
+                    if (duration == 0)
+                    {
+                        Destroy(notes[inputIndex].gameObject);
+                        inputIndex++;
+                    }
+                    else
+                    {
+                        notes[inputIndex].GetComponent<Note>().isPressing = true;
+                        isInLongNote = true; // Caso contrário, salvar que o usuário está segurando a tecla
+                    }
                 }
                 else
                 {
                     print($"Hit inaccurate on {inputIndex} note with {Math.Abs(audioTime - timeStamp)} delay");
                 }
             }
-            if (timeStamp + marginOfError <= audioTime)
+            // O usuário soltou a tecla e tava em uma nota longa
+            if (Input.GetKeyUp(input) && isInLongNote)
+            {
+                notes[inputIndex].GetComponent<Note>().isPressing = false;
+                isInLongNote = false;
+                Destroy(notes[inputIndex].gameObject);
+                inputIndex++;
+            }
+
+            // Passou do tempo que ele podia pressionar e não tava dentro de uma nota longa, então ele errou
+            if (timeStamp + marginOfError <= audioTime && !isInLongNote)
             {
                 Miss();
-                //print($"Missed {inputIndex} note");
+                print($"Missed {inputIndex} note");
                 inputIndex++;
+            }
+
+            // Passou da duração da nota, então não tá mais dentro de uma nota longa
+            if (endTimeStamp + marginOfError <= audioTime && isInLongNote)
+            {
+                isInLongNote = false;
+                notes[inputIndex].GetComponent<Note>().isPressing = false;
+                // Vai pra próxima nota
+                Destroy(notes[inputIndex].gameObject);
+                inputIndex++;
+            }
+            else if (isInLongNote) // Tá dentro da nota longa no tempo correto, ganha ponto
+            {
+                Point();
+
+                // Diminui o tamanho da nota longa pra dar a sensação que tá entrando na hitbox
+                var childTransform = notes[inputIndex].gameObject.transform.GetChild(0);
+                Vector3 scale = childTransform.localScale;
+                scale.y = ((float)remainingDuration * SongManager.Instance.noteDistanceToTap) / SongManager.Instance.noteTime;
+                childTransform.localScale = scale;
+
+                float halfHeight = scale.y / 2.0f;
+                Vector3 newPosition = childTransform.localPosition;
+                newPosition.y = halfHeight;
+                childTransform.localPosition = newPosition;
+
+                var longNotePressedTransform = notes[inputIndex].gameObject.transform.GetChild(1);
+                Vector3 scale2 = longNotePressedTransform.localScale;
+                scale2.y = scale.y;
+                longNotePressedTransform.localScale = scale2;
+                longNotePressedTransform.localPosition = newPosition;
             }
         }
 
@@ -145,5 +203,10 @@ public class Lane : MonoBehaviour
     private void Miss()
     {
         ScoreManager.Miss();
+    }
+
+    private void Point(int points = 1)
+    {
+        ScoreManager.Point(points);
     }
 }
