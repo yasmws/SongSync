@@ -77,6 +77,8 @@ public class SongManager : MonoBehaviour
 
     private void ReadFromFile()
     {
+        string songFolder = PlayerPrefs.GetString("song-folder");
+        fileLocation = "Assets/Audio/" + songFolder +"/notes.mid";
         midiFile = MidiFile.Read(fileLocation);
         Debug.Log(fileLocation);
         GetDataFromMidi();

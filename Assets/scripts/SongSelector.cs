@@ -11,7 +11,7 @@ public class SongSelector : MonoBehaviour
     public string path = string.Empty;
     public ScreenManager screenManager;
     public SongManager songManager;
-    private string folderPath = "Assets/Audio";
+   
 
 
     private string selectedFolder;
@@ -19,30 +19,16 @@ public class SongSelector : MonoBehaviour
     void Start()
     {
         // Check if the folder exists
-        if (Directory.Exists(folderPath))
-        {
-            // Get all subdirectories (folders) inside the target folder
-            string[] subDirectories = Directory.GetDirectories(folderPath);
-
-            // Log information about each subdirectory
-            foreach (string subDirectory in subDirectories)
-            {
-                // Get the name of the subdirectory
-                string folderName = Path.GetFileName(subDirectory);
-
-                // Log the folder information
-                Debug.Log("Folder Name: " + folderName);
-                Debug.Log("Full Path: " + subDirectory);
-            }
-        }
-        else
-        {
-            // Log an error if the folder doesn't exist
-            Debug.LogError("The folder '" + folderPath + "' does not exist.");
-        }
+        
     }
 
-    
+    public void SavePrefs(string songFolder)
+    {
+        PlayerPrefs.SetString("song-folder", songFolder);
+        PlayerPrefs.Save();
+    }
+
+
     public void OnFolderSelectionChanged()
     {
         // Update selected folder and populate song dropdown with songs from the selected folder

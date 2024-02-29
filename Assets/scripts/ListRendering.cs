@@ -52,6 +52,9 @@ public class ListRendering : MonoBehaviour
    
     }
 
+    
+
+
     // Update is called once per frame
     void Update()
     {
