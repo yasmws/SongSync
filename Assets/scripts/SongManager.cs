@@ -17,6 +17,7 @@ public class SongManager : MonoBehaviour
     public double marginOfError;
     public int test;
     public ICollection<Melanchall.DryWetMidi.Interaction.Note> notes;
+    public float minLongNoteDuration;
 
 
     public string fileLocation;
