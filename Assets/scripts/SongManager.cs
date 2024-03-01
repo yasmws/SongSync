@@ -103,6 +103,9 @@ public class SongManager : MonoBehaviour
 
     void Update()
     {
-
+        if (!audioSource.isPlaying)
+        {
+            ScreenManager.Instance.changeScene("EndGameScene");
+        }
     }
 }

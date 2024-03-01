@@ -198,15 +198,15 @@ public class Lane : MonoBehaviour
     }
     private void Hit()
     {
-        ScoreManager.Hit();
+        ScoreManager.Instance.Hit();
     }
     private void Miss()
     {
-        ScoreManager.Miss();
+        ScoreManager.Instance.Miss();
     }
 
     private void Point(int points = 1)
     {
-        ScoreManager.Point(points);
+        ScoreManager.Instance.Point(points);
     }
 }
