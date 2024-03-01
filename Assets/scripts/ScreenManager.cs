@@ -10,6 +10,7 @@ public class ScreenManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
     }
 
     // Update is called once per frame
