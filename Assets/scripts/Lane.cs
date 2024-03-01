@@ -39,7 +39,7 @@ public class Lane : MonoBehaviour
         {
             if (note.NoteNumber == noteRestriction)
             {
-                if (filteredNotesArray.Count > 0 && filteredNotesArray[^1].Time < note.Time && filteredNotesArray[^1].EndTime > note.Time) continue;
+                if (filteredNotesArray.Count > 0 && filteredNotesArray[^1].Time <= note.Time && filteredNotesArray[^1].EndTime >= note.Time) continue;
                 else filteredNotesArray.Add(note);
             }
         }
