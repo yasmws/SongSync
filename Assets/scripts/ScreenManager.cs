@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class ScreenManager : MonoBehaviour
 {
-    public string sceneName;
+    public static ScreenManager Instance;
+
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
     }
 
     // Update is called once per frame
@@ -17,7 +19,7 @@ public class ScreenManager : MonoBehaviour
         
     }
 
-    public void changeScene()
+    public void changeScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }

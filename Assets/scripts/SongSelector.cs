@@ -36,6 +36,8 @@ public class SongSelector : MonoBehaviour
         string[] songs = Directory.GetFiles(selectedFolder, "*.mp3");
         songDropdown.ClearOptions();
         songDropdown.AddOptions(new List<string>(songs));
+        ScoreManager.Instance.score = 0;
+        ScoreManager.Instance.comboScore = 0;
     }
 
     public void OnSongSelectionChanged()
