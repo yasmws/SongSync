@@ -102,7 +102,7 @@ public class SongManager : MonoBehaviour
             Debug.LogError("File not found: " + guitarPath);
             return;
         }
-         if (!File.Exists(songPath))
+        /* if (!File.Exists(songPath))
         {
             Debug.LogError("File not found: " + songPath);
             return;
@@ -111,7 +111,7 @@ public class SongManager : MonoBehaviour
         {
             Debug.LogError("File not found: " + rhythmPath);
             return;
-        }
+        } */
 
         AssetDatabase.ImportAsset(guitarPath, ImportAssetOptions.ForceUpdate);
         AssetDatabase.ImportAsset(songPath, ImportAssetOptions.ForceUpdate);
@@ -153,8 +153,8 @@ public class SongManager : MonoBehaviour
         Instance.audioSource.Play();
 
         Instance.audioSources[0].Play();
-        Instance.audioSources[1].Play();
-        Instance.audioSources[2].Play();
+        //Instance.audioSources[1].Play();
+        //Instance.audioSources[2].Play();
 
         played = 1;
     }
